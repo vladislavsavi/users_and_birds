@@ -4,6 +4,7 @@
   "main": "./src/main.js",
   "license": "MIT",
   "scripts": {
+    "ci": "node build/main.js",
     "start": "nodemon ./src/main.ts",
     "build": "tsc --project ./"
   },
