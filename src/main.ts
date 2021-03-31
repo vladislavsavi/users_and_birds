@@ -7,8 +7,10 @@ import express,
 } from 'express';
 import db from 'mongoose';
 import {json as jsonParse} from 'body-parser';
+import passport from 'passport';
 
-import { birdsRouter, userRouter } from './routes';
+import { birdsRouter, userRouter, authRouter } from './routes';
+import './authenticate';
 
 const app: Application = express();
 const port: number = 8080;
@@ -22,7 +24,8 @@ app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
 });
 app.use('/public', express.static(__dirname + '/public'));
 app.use('/bird', birdsRouter);
-app.use('/user', userRouter);
+app.use('/user', passport.authenticate('jwt', {session: false}), userRouter);
+app.use('/auth', authRouter);
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);

@@ -1,22 +1,62 @@
 import passport from 'passport';
-import { Strategy,ExtractJwt } from 'passport-jwt'
+import { Strategy as LocalStrategy } from 'passport-local';
+import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 
-import {UserModel} from '../models';
+import { UserModel } from '../models';
+import { config } from '../config';
+
+passport.use('signup', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+}, async (email, password, done) => {
+    try {
+        const user = await UserModel.create({ email, password });
+
+        return done(null, user);
+    } catch (error) {
+        done(error);
+    }
+}));
 
 passport.use(
-    new Strategy({
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: 'secret',
-        issuer: 'accounts.examplesoft.com',
-        audience: 'yoursite.net'
-    }, async (jwt_payload, done) => {
-        console.log(jwt_payload);
+    'login',
+    new LocalStrategy(
+        {
+            usernameField: 'email',
+            passwordField: 'password'
+        },
+        async (email, password, done) => {
+            try {
+                const user = await UserModel.findOne({ email });
+
+                if (!user) {
+                    return done(null, false, { message: 'User not found' });
+                }
+
+                const validate = await user.isValidPassword(password);
+
+                if (!validate) {
+                    return done(null, false, { message: 'Wrong Password' });
+                }
+
+                return done(null, user, { message: 'Logged in Successfully' });
+            } catch (error) {
+                return done(error);
+            }
+        }
+    )
+);
+
+passport.use(
+    new JWTStrategy({
+        secretOrKey: config.SECRET_KEY,
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
+    }, async (token, done) => {
         try {
-            console.log(jwt_payload);
-            const user = await UserModel.find(jwt_payload).exec();
-            done(user);
-        } catch (err) {
-            console.error(err);
+            console.log(token);
+            return done(null, token.user);
+        } catch (error) {
+            done(error);
         }
     })
-);
+)
