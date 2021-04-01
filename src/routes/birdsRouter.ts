@@ -23,7 +23,6 @@ birdsRouter.get('/', async (req: Request, res: Response) => {
 birdsRouter.get('/list', async (_req: Request, res: Response) => {
     try {
         const birds = await BirdModel.find({});
-        console.log(birds);
         
         res.send(birds);
     } catch (err) {

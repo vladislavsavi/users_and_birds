@@ -4,13 +4,14 @@
   "main": "./src/main.js",
   "license": "MIT",
   "scripts": {
-    "ci": "node build/main.js",
+    "ci": "NODE_ENV=production node build/main.js",
     "start": "nodemon ./src/main.ts",
     "build": "tsc --project ./"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "ioredis": "^4.24.5",
