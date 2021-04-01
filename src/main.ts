@@ -17,9 +17,10 @@ dotenv.config()
 
 const app: Application = express();
 const port: number = 8080;
-const port_db = process.env.NODE_ENV === 'production' ? process.env.DB_PORT : 27018
+const port_db = process.env.NODE_ENV === 'production' ? process.env.DB_PORT : 27018;
+const db_host =  process.env.NODE_ENV === 'production' ? process.env.DB_CONTAINER : '0.0.0.0';
 
-db.connect(`mongodb://0.0.0.0:${port_db}/data_base`, {useNewUrlParser: true, useUnifiedTopology: true})
+db.connect(`mongodb://${db_host}:${port_db}/data_base`, {useNewUrlParser: true, useUnifiedTopology: true})
 
 app.use(jsonParse());
 app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
