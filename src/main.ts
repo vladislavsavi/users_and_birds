@@ -6,6 +6,7 @@ import express,
     NextFunction,
 } from 'express';
 import db from 'mongoose';
+import cors from 'cors';
 import {json as jsonParse} from 'body-parser';
 import passport from 'passport';
 import dotenv from 'dotenv';
@@ -22,6 +23,7 @@ const db_host =  process.env.NODE_ENV === 'production' ? process.env.DB_CONTAINE
 
 db.connect(`mongodb://${db_host}:${port_db}/data_base`, {useNewUrlParser: true, useUnifiedTopology: true})
 
+app.use(cors());
 app.use(jsonParse());
 app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
