@@ -31,7 +31,7 @@ app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
 });
 app.use('/public', express.static(__dirname + '/public'));
 app.use('/bird', birdsRouter);
-app.use('/user', passport.authenticate('jwt', {session: false}), userRouter);
+app.use('/user', passport.authenticate('jwt', {session: true}), userRouter);
 app.use('/auth', authRouter);
 
 app.listen(port, () => {

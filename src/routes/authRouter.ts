@@ -39,7 +39,7 @@ authRouter.post(
 
                     req.login(
                         user,
-                        { session: false },
+                        { session: true },
                         async (error) => {
                             if (error) return next(error);
 
