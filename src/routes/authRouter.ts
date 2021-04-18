@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, Router } from 'express';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 
-import {config} from '../config';
+import { config } from '../config';
 
 const authRouter = Router();
 
@@ -12,7 +12,27 @@ authRouter.use((_req: Request, _res: Response, next: NextFunction) => {
     next();
 });
 
-
+/**
+ * @swagger
+ *  
+ * /auth/signup:
+ *   post:
+ *     produces:
+ *       - application/json
+ *     summary: Registration
+ *     description: Return user description
+ *     tags:
+ *       - /auth
+ *     parameters:
+ *       - name: email
+ *         in: json
+ *         required: true
+ *         type: string
+ *       - name: password
+ *         in: json
+ *         required: true
+ *         type: string
+ */
 authRouter.post(
     '/signup',
     passport.authenticate('signup', { session: false }),
@@ -24,6 +44,27 @@ authRouter.post(
     }
 );
 
+/**
+ * @swagger
+ *
+ * /auth/login:
+ *  post:
+ *     produces:
+ *       - application/json
+ *     summary: Authorization
+ *     description: Return user token and user description
+ *     tags:
+ *       - /auth
+ *     parameters:
+ *       - name: email
+ *         in: json
+ *         required: true
+ *         type: string
+ *       - name: password
+ *         in: json
+ *         required: true
+ *         type: string
+ */
 authRouter.post(
     '/login',
     async (req, res, next) => {
@@ -47,10 +88,10 @@ authRouter.post(
                             const token = jwt.sign({ user: body }, config.SECRET_KEY);
 
 
-                            const {_id: id, email} = user;
-                            
+                            const { _id: id, email } = user;
 
-                            return res.json({ token, userData: {id, email} });
+
+                            return res.json({ token, userData: { id, email } });
                         }
                     );
                 } catch (error) {

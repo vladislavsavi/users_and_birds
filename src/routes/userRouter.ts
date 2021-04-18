@@ -11,7 +11,24 @@ userRouter.use((_req: Request, _res: Response, next: NextFunction) => {
     next();
 });
 
-
+/**
+ * @swagger
+ * /user?id={id}:
+ *   get:
+ *     summary: Get user by id
+ *     description: This will return the user if you have a session token
+ *     tags:
+ *       - /user
+ *     responses:
+ *       200:
+ *         description: that user
+ *         schema:
+ *           type: object
+ *           properties:
+ *             bird:
+ *               type: object
+ *               description: that user
+ */
 userRouter.get('/', async (req: Request, res: Response) => {
     try {
         const user = await UserModel.findById(req.query.id);
@@ -23,6 +40,24 @@ userRouter.get('/', async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /user/list:
+ *   get:
+ *     summary: Get a list of users
+ *     description: This will return a list of users if you have a session token
+ *     tags:
+ *       - /user
+ *     responses:
+ *       200:
+ *         description: list of users
+ *         schema:
+ *           type: object
+ *           properties:
+ *             bird:
+ *               type: object
+ *               description: list of users
+ */
 userRouter.get('/list', async (req: Request, res: Response) => {
     try {
         const users = await UserModel.find({});
