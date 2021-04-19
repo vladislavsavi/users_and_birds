@@ -3,7 +3,6 @@
 ## Installation:
 
 Use [yarn](https://classic.yarnpkg.com/en/docs/install) or [npm](https://www.npmjs.com) package manager to install dependencies.
-
 ### yarn
 ```bash
 yarn
